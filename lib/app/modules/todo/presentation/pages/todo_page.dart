@@ -9,6 +9,8 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight =
+        (MediaQuery.of(context).size.height - AppBar().preferredSize.height);
     return Scaffold(
         appBar: AppBar(
           title: const CustomText(
@@ -18,30 +20,15 @@ class TodoPage extends StatelessWidget {
             color: AppTheme.white,
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-          child: Column(
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  hintText: "Provide a name..",
-                  hintStyle: Theme.of(context).textTheme.body.copyWith(),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(12)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(12)),
-                  filled: true,
-                  border: InputBorder.none,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: TextField(
-                  maxLines: 6,
+        body: SingleChildScrollView(
+          child: Container(
+            height: screenHeight,
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+            child: Column(
+              children: [
+                TextField(
                   decoration: InputDecoration(
-                    hintText: "Enter the description..",
+                    hintText: "Provide a name..",
                     hintStyle: Theme.of(context).textTheme.body.copyWith(),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -53,24 +40,44 @@ class TodoPage extends StatelessWidget {
                     border: InputBorder.none,
                   ),
                 ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.date_range),
-                title: const CustomText(
-                  value: "When you want to perform this task?",
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: TextField(
+                    maxLines: 6,
+                    decoration: InputDecoration(
+                      hintText: "Enter the description..",
+                      hintStyle: Theme.of(context).textTheme.body.copyWith(),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(12)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(12)),
+                      filled: true,
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
-                subtitle: const CustomText(value: "23 July, 2023"),
-                trailing: TextButton(
+                ListTile(
+                  leading: const Icon(Icons.date_range),
+                  title: const CustomText(
+                    value: "When you want to perform this task?",
+                  ),
+                  subtitle: const CustomText(value: "23 July, 2023"),
+                  trailing: TextButton(
+                    onPressed: () {},
+                    child: const Icon(Icons.add),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                PrimaryButton(
+                  labelText: "Save",
                   onPressed: () {},
-                  child: const Icon(Icons.add),
                 ),
-              ),
-              const Spacer(),
-              PrimaryButton(
-                labelText: "Save",
-                onPressed: () {},
-              ),
-            ],
+              ],
+            ),
           ),
         ));
   }
