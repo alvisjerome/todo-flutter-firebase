@@ -9,8 +9,6 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight =
-        (MediaQuery.of(context).size.height - AppBar().preferredSize.height);
     return Scaffold(
         appBar: AppBar(
           title: const CustomText(
@@ -21,8 +19,7 @@ class TodoPage extends StatelessWidget {
           ),
         ),
         body: SingleChildScrollView(
-          child: Container(
-            height: screenHeight,
+          child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
             child: Column(
               children: [
