@@ -1,0 +1,1 @@
+enum TodoMenuEnum { edit, delete }
