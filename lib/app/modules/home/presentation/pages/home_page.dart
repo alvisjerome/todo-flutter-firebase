@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         title: const CustomText(
           value: "Todos",
-          fontSize: 20,
+          fontSize: 17,
           fontWeight: FontWeight.w500,
           color: AppTheme.white,
         ),
@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
                 Navigator.pushNamed(context, AppPaths.profile);
               },
               icon: const Icon(
-                Icons.person,
+                Icons.account_circle,
               ))
         ],
       ),

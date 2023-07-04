@@ -1,3 +1,4 @@
+import 'package:app/app/widgets/custom_date_picker.dart';
 import 'package:app/app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class TodoPage extends StatelessWidget {
         appBar: AppBar(
           title: const CustomText(
             value: "Add Todo",
-            fontSize: 20,
+            fontSize: 17,
             fontWeight: FontWeight.w500,
             color: AppTheme.white,
           ),
@@ -56,16 +57,14 @@ class TodoPage extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.date_range),
-                  title: const CustomText(
-                    value: "When you want to perform this task?",
-                  ),
-                  subtitle: const CustomText(value: "23 July, 2023"),
-                  trailing: TextButton(
-                    onPressed: () {},
-                    child: const Icon(Icons.add),
-                  ),
-                ),
+                    leading: const Icon(Icons.date_range),
+                    title: const CustomText(
+                      value: "When you want to perform this task?",
+                    ),
+                    subtitle: const CustomText(value: "23 July, 2023"),
+                    trailing: CustomDatePicker(
+                      onDateSelected: (value) {},
+                    )),
                 const SizedBox(
                   height: 30,
                 ),

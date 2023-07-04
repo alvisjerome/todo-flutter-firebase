@@ -14,7 +14,7 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: const CustomText(
           value: "My Profile",
-          fontSize: 20,
+          fontSize: 17,
           fontWeight: FontWeight.w500,
           color: AppTheme.white,
         ),
@@ -24,16 +24,10 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: AppTheme.lightPink),
-              height: 100,
-              width: 100,
-              child: const Icon(
-                Icons.person,
-                size: 65,
-              ),
-            ),
+            const Icon(Icons.account_circle,
+                size: 100,
+                // color: AppTheme.lightPink,
+                color: AppTheme.deepBrown),
             const SizedBox(
               height: 20,
             ),
