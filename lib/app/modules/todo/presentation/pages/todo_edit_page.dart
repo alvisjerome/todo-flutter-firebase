@@ -1,3 +1,5 @@
+import 'package:app/core/enums/todo_usecase.dart';
+
 import '../../../../widgets/custom_date_picker.dart';
 import '../../../../widgets/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -5,15 +7,23 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../widgets/primary_button.dart';
 
-class TodoEditPage extends StatelessWidget {
-  const TodoEditPage({super.key});
+class TodoEditPage extends StatefulWidget {
+  final TodoUseCase? useCase;
+  const TodoEditPage({super.key, required this.useCase});
 
+  @override
+  State<TodoEditPage> createState() => _TodoEditPageState();
+}
+
+class _TodoEditPageState extends State<TodoEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const CustomText(
-            value: "Add Todo",
+          title: CustomText(
+            value: widget.useCase == TodoUseCase.addTodo
+                ? "Add Todo"
+                : "Edit Todo",
             fontSize: 17,
             fontWeight: FontWeight.w500,
             color: AppTheme.white,
@@ -36,6 +46,7 @@ class TodoEditPage extends StatelessWidget {
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(12)),
                     filled: true,
+                    fillColor: AppTheme.lightPink,
                     border: InputBorder.none,
                   ),
                 ),
@@ -54,6 +65,7 @@ class TodoEditPage extends StatelessWidget {
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(12)),
                       filled: true,
+                      fillColor: AppTheme.lightPink,
                       border: InputBorder.none,
                     ),
                   ),

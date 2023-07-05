@@ -11,7 +11,7 @@ class TaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.lightPink,
+        color: AppTheme.randomColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: const Column(

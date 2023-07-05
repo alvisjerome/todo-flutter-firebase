@@ -1,3 +1,4 @@
+import 'package:app/core/enums/todo_usecase.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/modules/authentication/presentation/pages/authentication_page.dart';
@@ -16,7 +17,9 @@ final class AppRoutes {
       case AppPaths.profile:
         return MaterialPageRoute(builder: (_) => const ProfilePage());
       case AppPaths.editTodo:
-        return MaterialPageRoute(builder: (_) => const TodoEditPage());
+        return MaterialPageRoute(
+            builder: (_) =>
+                TodoEditPage(useCase: settings?.arguments as TodoUseCase?));
       default:
         return MaterialPageRoute(builder: (_) => const _ErrorPage());
     }

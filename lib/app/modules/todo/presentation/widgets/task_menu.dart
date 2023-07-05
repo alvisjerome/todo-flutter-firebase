@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/enums/todo_menu_enum.dart';
+import '../../../../../core/enums/todo_usecase.dart';
 import '../../../../../core/routes/app_paths.dart';
 import '../../../../widgets/component_functions.dart';
 import '../../../../widgets/custom_text.dart';
@@ -25,7 +26,8 @@ class TaskMenu extends StatelessWidget {
       ],
       onSelected: (String value) {
         if (value == TodoMenuEnum.edit.name) {
-          Navigator.pushNamed(context, AppPaths.todo);
+          Navigator.pushNamed(context, AppPaths.editTodo,
+              arguments: TodoUseCase.editTodo);
         } else if (value == TodoMenuEnum.delete.name) {
           ComponentFunctions.hanleSnackBar(
               context: context, snakbar: const DeleteTaskSnackbar());

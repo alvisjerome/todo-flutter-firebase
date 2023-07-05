@@ -1,3 +1,5 @@
+import 'package:app/core/enums/todo_usecase.dart';
+
 import '../../../../../core/routes/app_paths.dart';
 import '../../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +40,8 @@ class TodoPage extends StatelessWidget {
             return const TaskTile();
           }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, AppPaths.todo),
+        onPressed: () => Navigator.pushNamed(context, AppPaths.editTodo,
+            arguments: TodoUseCase.addTodo),
         child: const Icon(Icons.add),
       ),
     );
