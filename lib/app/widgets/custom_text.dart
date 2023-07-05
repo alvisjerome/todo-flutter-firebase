@@ -1,5 +1,6 @@
-import '../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../core/theme/app_theme.dart';
 
 class CustomText extends StatelessWidget {
   final String value;

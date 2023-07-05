@@ -1,7 +1,8 @@
-import 'task_menu.dart';
-import '../../../../widgets/custom_text.dart';
-import '../../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../../core/theme/app_theme.dart';
+import '../../../../widgets/custom_text.dart';
+import 'task_menu.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({super.key});

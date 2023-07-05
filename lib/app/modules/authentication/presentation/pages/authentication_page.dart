@@ -48,7 +48,7 @@ class AuthenticationPage extends StatelessWidget {
                   PrimaryButton(
                       labelText: "Continue with Google",
                       onPressed: () {
-                        Navigator.pushNamed(context, AppPaths.home);
+                        Navigator.pushNamed(context, AppPaths.todo);
                       }),
                   Container(
                     alignment: Alignment.center,
