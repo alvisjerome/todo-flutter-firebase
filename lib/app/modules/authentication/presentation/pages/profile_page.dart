@@ -1,3 +1,6 @@
+import 'package:app/app/modules/authentication/presentation/providers/authentication_provider.dart';
+import 'package:provider/provider.dart';
+
 import '../../../../widgets/custom_text.dart';
 
 import 'package:flutter/material.dart';
@@ -66,7 +69,9 @@ class ProfilePage extends StatelessWidget {
             const Spacer(),
             PrimaryButton(
               labelText: "Log Out",
-              onPressed: () {},
+              onPressed: () async {
+                await context.read<AuthenticationProvider>().handleSignOut();
+              },
             ),
           ],
         ),

@@ -1,6 +1,9 @@
+import 'package:app/app/modules/authentication/presentation/providers/authentication_provider.dart';
+import 'package:provider/provider.dart';
+
 import '../../../../widgets/primary_button.dart';
 import '../../../../../core/common/image_paths.dart';
-import '../../../../../core/routes/app_paths.dart';
+
 import '../../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -47,8 +50,10 @@ class AuthenticationPage extends StatelessWidget {
                 children: [
                   PrimaryButton(
                       labelText: "Continue with Google",
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppPaths.todo);
+                      onPressed: () async {
+                        await context
+                            .read<AuthenticationProvider>()
+                            .handleGoogleSignIn();
                       }),
                   Container(
                     alignment: Alignment.center,

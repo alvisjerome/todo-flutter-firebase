@@ -1,10 +1,12 @@
-import 'package:app/core/enums/todo_usecase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/modules/authentication/presentation/pages/authentication_page.dart';
 import '../../app/modules/authentication/presentation/pages/profile_page.dart';
 import '../../app/modules/todo/presentation/pages/todo_edit_page.dart';
 import '../../app/modules/todo/presentation/pages/todo_page.dart';
+import '../../app/widgets/error_page.dart';
+import '../enums/todo_usecase.dart';
 import 'app_paths.dart';
 
 final class AppRoutes {
@@ -21,20 +23,11 @@ final class AppRoutes {
             builder: (_) =>
                 TodoEditPage(useCase: settings?.arguments as TodoUseCase?));
       default:
-        return MaterialPageRoute(builder: (_) => const _ErrorPage());
+        return MaterialPageRoute(builder: (_) => const ErrorPage());
     }
   }
-}
 
-class _ErrorPage extends StatelessWidget {
-  const _ErrorPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Something went wrong"),
-      ),
-    );
+  static String getInitialRoute(User? user) {
+    return (user == null) ? AppPaths.auth : AppPaths.todo;
   }
 }
