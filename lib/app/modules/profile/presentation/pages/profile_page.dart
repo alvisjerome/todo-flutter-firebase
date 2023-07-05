@@ -1,4 +1,4 @@
-import 'package:app/app/widgets/custom_text.dart';
+import '../../../../widgets/custom_text.dart';
 
 import 'package:flutter/material.dart';
 

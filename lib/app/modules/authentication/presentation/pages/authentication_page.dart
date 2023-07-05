@@ -1,7 +1,7 @@
-import 'package:app/app/widgets/primary_button.dart';
-import 'package:app/core/common/image_paths.dart';
-import 'package:app/core/routes/app_paths.dart';
-import 'package:app/core/theme/app_theme.dart';
+import '../../../../widgets/primary_button.dart';
+import '../../../../../core/common/image_paths.dart';
+import '../../../../../core/routes/app_paths.dart';
+import '../../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../widgets/custom_text.dart';

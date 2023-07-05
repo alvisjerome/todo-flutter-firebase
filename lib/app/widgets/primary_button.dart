@@ -8,6 +8,7 @@ class PrimaryButton extends StatelessWidget {
   final String labelText;
   final VoidCallback onPressed;
   final double? height, width;
+  final bool useCustomSize;
 
   const PrimaryButton({
     super.key,
@@ -15,6 +16,7 @@ class PrimaryButton extends StatelessWidget {
     this.labelColor,
     this.height,
     this.width,
+    this.useCustomSize = true,
     required this.labelText,
     required this.onPressed,
   });
@@ -27,7 +29,9 @@ class PrimaryButton extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           backgroundColor: color ?? AppTheme.black,
-          fixedSize: Size(width ?? double.maxFinite, height ?? 48)),
+          fixedSize: !useCustomSize
+              ? null
+              : Size(width ?? double.maxFinite, height ?? 48)),
       onPressed: onPressed,
       child: CustomText(
         value: labelText,

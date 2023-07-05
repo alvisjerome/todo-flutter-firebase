@@ -1,7 +1,10 @@
-import 'package:app/app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/enums/todo_menu_enum.dart';
+import '../../../../../core/routes/app_paths.dart';
+import '../../../../widgets/component_functions.dart';
+import '../../../../widgets/custom_text.dart';
+import 'delete_task_snackbar.dart';
 
 class TaskMenu extends StatelessWidget {
   const TaskMenu({super.key});
@@ -21,7 +24,12 @@ class TaskMenu extends StatelessWidget {
         ),
       ],
       onSelected: (String value) {
-        // print('Selected option: $value');
+        if (value == TodoMenuEnum.edit.name) {
+          Navigator.pushNamed(context, AppPaths.todo);
+        } else if (value == TodoMenuEnum.delete.name) {
+          ComponentFunctions.hanleSnackBar(
+              context: context, snakbar: const DeleteTaskSnackbar());
+        }
       },
       icon: const Icon(Icons.more_vert),
     );

@@ -1,6 +1,6 @@
-import 'package:app/app/modules/home/presentation/widgets/task_menu.dart';
-import 'package:app/app/widgets/custom_text.dart';
-import 'package:app/core/theme/app_theme.dart';
+import 'task_menu.dart';
+import '../../../../widgets/custom_text.dart';
+import '../../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class TaskTile extends StatelessWidget {
@@ -24,6 +24,8 @@ class TaskTile extends StatelessWidget {
                 child: CustomText(
                   value: "Shopping Grocery",
                   fontWeight: FontWeight.bold,
+                  maxLine: 2,
+                  textOverflow: TextOverflow.ellipsis,
                 ),
               )),
               TaskMenu()

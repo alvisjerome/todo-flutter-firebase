@@ -12,7 +12,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   final currentDate = DateTime.now();
   final lastDate = DateTime(2100);
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> handleSelectDate() async {
     final picked = await showDatePicker(
       context: context,
       initialDate: currentDate,
@@ -28,7 +28,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => _selectDate(context),
+      onPressed: handleSelectDate,
       child: const Icon(Icons.add),
     );
   }

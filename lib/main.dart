@@ -1,10 +1,16 @@
-import 'package:app/core/routes/app_paths.dart';
-import 'package:app/core/routes/app_routes.dart';
-import 'package:app/core/theme/app_theme.dart';
+import 'core/routes/app_paths.dart';
+import 'core/routes/app_routes.dart';
+import 'core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'core/common/app_providers.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: AppProviders.providers,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

@@ -1,5 +1,5 @@
-import 'package:app/app/widgets/custom_date_picker.dart';
-import 'package:app/app/widgets/custom_text.dart';
+import '../../../../widgets/custom_date_picker.dart';
+import '../../../../widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_theme.dart';
@@ -25,6 +25,7 @@ class TodoPage extends StatelessWidget {
             child: Column(
               children: [
                 TextField(
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     hintText: "Provide a name..",
                     hintStyle: Theme.of(context).textTheme.body.copyWith(),
@@ -41,6 +42,7 @@ class TodoPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: TextField(
+                    textInputAction: TextInputAction.done,
                     maxLines: 6,
                     decoration: InputDecoration(
                       hintText: "Enter the description..",
