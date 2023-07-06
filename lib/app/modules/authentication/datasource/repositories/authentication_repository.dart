@@ -15,7 +15,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       {required this.googleSignIn, required this.firebaseAuth});
 
   @override
-  Stream<User?> get authStateChanges => firebaseAuth.idTokenChanges();
+  Stream<User?> get authStateChanges => firebaseAuth.authStateChanges();
 
   @override
   Future<UserCredential> authenticateWithGoogle() async {
