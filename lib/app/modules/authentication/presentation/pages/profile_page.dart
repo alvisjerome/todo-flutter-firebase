@@ -1,4 +1,3 @@
-import 'package:app/core/routes/app_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -90,8 +89,8 @@ class ProfilePage extends StatelessWidget {
                             Helpers.onErrorSnackbar(message, context),
                         onLoading: () => Helpers.onLoadingSnackbar(context),
                         onSuccess: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, AppPaths.auth, (route) => false);
+                          Helpers.onSuccessSnackbar(
+                              context, "Logged out successfully!");
                         }));
               },
             ),

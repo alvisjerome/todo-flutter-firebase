@@ -55,13 +55,12 @@ class AuthenticationPage extends StatelessWidget {
                             .read<AuthenticationProvider>()
                             .handleGoogleSignIn(
                               requestHandlers: RequestHandlers(
-                                onError: ([message]) =>
-                                    Helpers.onErrorSnackbar(message, context),
-                                onLoading: () =>
-                                    Helpers.onLoadingSnackbar(context),
-                                onSuccess: () => ScaffoldMessenger.of(context)
-                                    .hideCurrentSnackBar(),
-                              ),
+                                  onError: ([message]) =>
+                                      Helpers.onErrorSnackbar(message, context),
+                                  onLoading: () =>
+                                      Helpers.onLoadingSnackbar(context),
+                                  onSuccess: () => Helpers.onSuccessSnackbar(
+                                      context, "Logged In Successfully!")),
                             );
                       }),
                   Container(

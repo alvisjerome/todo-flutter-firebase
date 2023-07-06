@@ -1,3 +1,6 @@
+import 'package:app/app/modules/todo/datasource/models/todo.dart';
+import 'package:app/app/modules/todo/presentation/widgets/task_textfield.dart';
+import 'package:app/core/utils/conversion.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,10 +23,47 @@ class TodoEditPage extends StatefulWidget {
 }
 
 class _TodoEditPageState extends State<TodoEditPage> {
+  ValueNotifier<DateTime?> dateTime = ValueNotifier<DateTime?>(null);
+
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+
+  Todo? get previousTodo {
+    return widget.routeProps.todo;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    titleController.text = previousTodo?.title ?? "";
+    descriptionController.text = previousTodo?.description ?? "";
+    dateTime.value = previousTodo?.dateTime;
+  }
+
+  void saveButtonHandler() {
+    final Todo todo = Todo(
+      id: widget.routeProps.todo?.id,
+      dateTime: dateTime.value,
+      title: titleController.text.trim(),
+      description: descriptionController.text.trim(),
+    );
+    context
+        .read<TodoProvider>()
+        .handleAddOrEdit(
+            useCase: widget.routeProps.useCase,
+            todo: todo,
+            handlers: RequestHandlers(
+              onError: ([message]) => Helpers.onErrorSnackbar(message, context),
+              onSuccess: () => Helpers.onSuccessSnackbar(context),
+              onLoading: () => Helpers.onLoadingSnackbar(context),
+            ))
+        .then((value) {
+      Navigator.pop(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final todoProvider = context.read<TodoProvider>();
-
     return Scaffold(
         appBar: AppBar(
           title: CustomText(
@@ -40,63 +80,30 @@ class _TodoEditPageState extends State<TodoEditPage> {
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
             child: Column(
               children: [
-                TextField(
-                  controller: todoProvider.titleController,
-                  textInputAction: TextInputAction.done,
-                  style: Theme.of(context).textTheme.body,
-                  decoration: InputDecoration(
-                    hintText: "Provide a name..",
-                    hintStyle: Theme.of(context).textTheme.body.copyWith(),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12)),
-                    filled: true,
-                    fillColor: AppTheme.lightPink,
-                    border: InputBorder.none,
-                  ),
-                ),
+                TaskTextField(
+                    controller: titleController, hintText: "Provide a name.."),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: TextField(
-                    controller: todoProvider.descriptionController,
-                    textInputAction: TextInputAction.done,
-                    style: Theme.of(context).textTheme.body,
-                    maxLines: 6,
-                    decoration: InputDecoration(
-                      hintText: "Enter the description..",
-                      hintStyle: Theme.of(context).textTheme.body.copyWith(),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(12)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(12)),
-                      filled: true,
-                      fillColor: AppTheme.lightPink,
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: TaskTextField(
+                        controller: descriptionController,
+                        maxLines: 6,
+                        hintText: "Enter the description..")),
                 ListTile(
                     leading: const Icon(Icons.date_range),
                     title: const CustomText(
                       value: "When you want to perform this task?",
                     ),
-                    subtitle: Consumer<TodoProvider>(
+                    subtitle: ValueListenableBuilder<DateTime?>(
+                      valueListenable: dateTime,
                       builder: (context, value, _) {
                         return CustomText(
-                            value: todoProvider.getDateTime(
-                                useCase: widget.routeProps.useCase,
-                                todo: widget.routeProps.todo));
+                            value: Conversion.formatDate(dateTime.value));
                       },
                     ),
                     trailing: CustomDatePicker(
                       initialDate: widget.routeProps.todo?.dateTime,
                       onDateSelected: (value) {
-                        todoProvider.dateTime = value;
+                        dateTime.value = value;
                       },
                     )),
                 const SizedBox(
@@ -104,23 +111,18 @@ class _TodoEditPageState extends State<TodoEditPage> {
                 ),
                 PrimaryButton(
                   labelText: "Save",
-                  onPressed: () => todoProvider
-                      .handleAddOrEdit(
-                          useCase: widget.routeProps.useCase,
-                          id: widget.routeProps.todo?.id,
-                          handlers: RequestHandlers(
-                            onError: ([message]) =>
-                                Helpers.onErrorSnackbar(message, context),
-                            onSuccess: () => Helpers.onSuccessSnackbar(context),
-                            onLoading: () => Helpers.onLoadingSnackbar(context),
-                          ))
-                      .then((value) {
-                    Navigator.pop(context);
-                  }),
+                  onPressed: saveButtonHandler,
                 ),
               ],
             ),
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
   }
 }

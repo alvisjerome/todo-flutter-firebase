@@ -40,7 +40,7 @@ class TaskTile extends StatelessWidget {
               )
             ],
           ),
-          Flexible(
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 10.0, top: 5, right: 10),
               child: CustomText(

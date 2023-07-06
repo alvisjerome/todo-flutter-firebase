@@ -10,56 +10,12 @@ import '../../datasource/repositories/todo_repository.dart';
 
 class TodoProvider with ChangeNotifier {
   final _todoRepository = sl<TodoRepository>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  DateTime? _dateTime = DateTime.now();
-
-  set dateTime(DateTime value) {
-    _dateTime = value;
-    notifyListeners();
-  }
-
-  TextEditingController get titleController => _titleController;
-  TextEditingController get descriptionController => _descriptionController;
-
-  String get title {
-    final value = _titleController.text.trim();
-
-    if (value.isNotEmpty) {
-      return value;
-    }
-    return "";
-  }
-
-  String get description {
-    final value = _descriptionController.text.trim();
-
-    if (value.isNotEmpty) {
-      return value;
-    }
-    return "";
-  }
-
-  String getDateTime({required TodoUseCase useCase, Todo? todo}) {
-    return Conversion.formatDate(_dateTime ?? todo?.dateTime);
-  }
-
-  void setInitialValuesOnEdit(Todo? todo) {
-    _titleController.text = todo?.title ?? "";
-    _descriptionController.text = todo?.description ?? "";
-  }
 
   Future<void> handleAddOrEdit(
-      {TodoUseCase? useCase,
-      String? id,
+      {required TodoUseCase? useCase,
+      required Todo todo,
       required RequestHandlers handlers}) async {
     try {
-      final todo = Todo(
-        id: id,
-        title: title,
-        description: description,
-        dateTime: _dateTime,
-      );
       if (todo.title?.isNotEmpty ?? false) {
         handlers.onLoading!();
         if (useCase == TodoUseCase.addTodo) {

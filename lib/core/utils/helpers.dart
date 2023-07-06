@@ -1,3 +1,4 @@
+import 'package:app/core/common/app_keys.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/widgets/component_functions.dart';
@@ -7,7 +8,7 @@ import '../theme/app_theme.dart';
 final class Helpers {
   static void onErrorSnackbar(String? message, BuildContext context) {
     ComponentFunctions.handleSnackBar(
-        context: context,
+        context: AppKeys.navigatorKey.currentContext ?? context,
         snakbar: SnackBar(
           backgroundColor: AppTheme.deepRed,
           content: CustomText(
@@ -19,7 +20,7 @@ final class Helpers {
 
   static void onLoadingSnackbar(BuildContext context) {
     ComponentFunctions.handleSnackBar(
-        context: context,
+        context: AppKeys.navigatorKey.currentContext ?? context,
         snakbar: SnackBar(
             backgroundColor: AppTheme.tealGreen,
             content: Row(
@@ -44,7 +45,7 @@ final class Helpers {
 
   static void onSuccessSnackbar(BuildContext context, [String? message]) {
     ComponentFunctions.handleSnackBar(
-        context: context,
+        context: AppKeys.navigatorKey.currentContext ?? context,
         snakbar: SnackBar(
             duration: const Duration(seconds: 1),
             backgroundColor: AppTheme.tealGreen,

@@ -1,3 +1,4 @@
+import 'package:app/core/common/app_keys.dart';
 import 'package:flutter/material.dart';
 
 import 'app/modules/authentication/datasource/repositories/authentication_repository.dart';
@@ -18,6 +19,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: AppKeys.navigatorKey,
       title: 'STAGE Todo',
       theme: AppTheme.appTheme(context),
       onGenerateRoute: AppRoutes.onGenerateRoute,

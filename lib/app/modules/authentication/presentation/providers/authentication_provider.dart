@@ -35,8 +35,8 @@ class AuthenticationProvider with ChangeNotifier {
   }
 
   void handleSignOut({required RequestHandlers requestHandlers}) async {
-    requestHandlers.onLoading!();
     try {
+      requestHandlers.onLoading!();
       await authenticationRepository.signOut();
       requestHandlers.onSuccess!();
     } on FirebaseException catch (e) {

@@ -36,7 +36,6 @@ class TaskMenu extends StatelessWidget {
               (useCase: TodoUseCase.editTodo, todo: todo);
           Navigator.pushNamed(context, AppPaths.editTodo,
               arguments: routeProps);
-          todoProvider.setInitialValuesOnEdit(todo);
         } else if (value == TodoMenuEnum.delete.name) {
           todoProvider.handleDeleteTodo(
               todoId: todo?.id ?? "",

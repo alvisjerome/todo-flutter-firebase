@@ -53,7 +53,7 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Future<void> updateTodo(Todo todo) async {
     final docRef = _todosCollection.doc(todo.id);
-    await docRef.update({
+    return await docRef.update({
       'title': todo.title,
       'description': todo.description,
       'dateTime': todo.dateTime,
@@ -63,6 +63,6 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Future<void> deleteTodo(String todoId) async {
     final docRef = _todosCollection.doc(todoId);
-    await docRef.delete();
+    return await docRef.delete();
   }
 }
