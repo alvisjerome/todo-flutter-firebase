@@ -1,40 +1,48 @@
-import 'package:app/core/utils/conversion.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../core/utils/conversion.dart';
+import '../../../../../core/utils/request_handlers.dart';
 import '../../../../../injection_container.dart';
+import '../../datasource/models/main_user.dart';
 import '../../datasource/repositories/authentication_repository.dart';
 
 class AuthenticationProvider with ChangeNotifier {
   final authenticationRepository = sl<AuthenticationRepository>();
+
   final firebaseAuth = sl<FirebaseAuth>();
 
-  User? _userValue;
-  User? get user => _userValue ?? firebaseAuth.currentUser;
+  UserCredential? userCredential;
+  User? get user => userCredential?.user ?? firebaseAuth.currentUser;
 
-  String get username {
-    return user?.displayName ?? "";
+  MainUser get mainUser => MainUser(
+        name: user?.displayName ?? "",
+        email: user?.email ?? "",
+        photo: user?.photoURL ?? "",
+        created: Conversion.formatDate(user?.metadata.creationTime),
+      );
+
+  void handleGoogleSignIn({required RequestHandlers requestHandlers}) async {
+    try {
+      requestHandlers.onLoading!();
+      userCredential = await authenticationRepository.authenticateWithGoogle();
+      requestHandlers.onSuccess!();
+    } on FirebaseException catch (e) {
+      requestHandlers.onError!(e.message.toString());
+    } catch (e) {
+      requestHandlers.onError!();
+    }
   }
 
-  String get email {
-    return user?.email ?? "";
-  }
-
-  String get profilePicture {
-    return user?.photoURL ?? "";
-  }
-
-  String get accountCreation {
-    return Conversion.formatDate(user?.metadata.creationTime);
-  }
-
-  Future<void> handleGoogleSignIn() async {
-    final userCredential =
-        await authenticationRepository.authenticateWithGoogle();
-    _userValue = userCredential.user;
-  }
-
-  Future<void> handleSignOut() async {
-    await authenticationRepository.signOut();
+  void handleSignOut({required RequestHandlers requestHandlers}) async {
+    requestHandlers.onLoading!();
+    try {
+      await authenticationRepository.signOut();
+      requestHandlers.onSuccess!();
+    } on FirebaseException catch (e) {
+      requestHandlers.onError!(e.message.toString());
+    } catch (e) {
+      requestHandlers.onError!();
+    }
   }
 }

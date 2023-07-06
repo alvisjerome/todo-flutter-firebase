@@ -1,15 +1,15 @@
-import 'package:app/app/modules/todo/presentation/providers/todo_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/enums/todo_menu_enum.dart';
 import '../../../../../core/enums/todo_usecase.dart';
 import '../../../../../core/routes/app_paths.dart';
+import '../../../../../core/utils/helpers.dart';
+import '../../../../../core/utils/request_handlers.dart';
 import '../../../../../core/utils/typedefs.dart';
-import '../../../../widgets/component_functions.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../datasource/models/todo.dart';
-import 'delete_task_snackbar.dart';
+import '../providers/todo_provider.dart';
 
 class TaskMenu extends StatelessWidget {
   final Todo? todo;
@@ -38,9 +38,17 @@ class TaskMenu extends StatelessWidget {
               arguments: routeProps);
           todoProvider.setInitialValuesOnEdit(todo);
         } else if (value == TodoMenuEnum.delete.name) {
-          todoProvider.deleteTodo(todo?.id ?? "").then((value) =>
-              ComponentFunctions.hanleSnackBar(
-                  context: context, snakbar: const DeleteTaskSnackbar()));
+          todoProvider.handleDeleteTodo(
+              todoId: todo?.id ?? "",
+              handlers: RequestHandlers(
+                onError: ([message]) =>
+                    Helpers.onErrorSnackbar(message, context),
+                onSuccess: () => Helpers.onSuccessSnackbar(
+                  context,
+                  "Task has successfully deleted!",
+                ),
+                onLoading: () => Helpers.onLoadingSnackbar(context),
+              ));
         }
       },
       icon: const Icon(Icons.more_vert),

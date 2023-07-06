@@ -1,7 +1,7 @@
-import 'package:app/core/enums/collections_enum.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../../../core/enums/collections_enum.dart';
 import '../models/todo.dart';
 
 abstract interface class TodoRepository {
@@ -19,7 +19,7 @@ class TodoRepositoryImpl implements TodoRepository {
   TodoRepositoryImpl({required this.firestore, required this.firebaseAuth}) {
     _todosCollection = firestore
         .collection(CollectionEnum.users.name)
-        .doc("DHzyOui9TSrfVOpLkbco")
+        .doc(firebaseAuth.currentUser?.uid)
         .collection(CollectionEnum.todos.name);
   }
 
@@ -32,7 +32,9 @@ class TodoRepositoryImpl implements TodoRepository {
           id: doc.id,
           title: data?['title'],
           description: data?['description'],
-          dateTime: (data?['dateTime'] as Timestamp).toDate(),
+          dateTime: data?['dateTime'] != null
+              ? (data?['dateTime'] as Timestamp).toDate()
+              : null,
         );
       }).toList();
     });

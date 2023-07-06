@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../../../../core/enums/todo_usecase.dart';
 import '../../../../../core/theme/app_theme.dart';
+import '../../../../../core/utils/helpers.dart';
+import '../../../../../core/utils/request_handlers.dart';
 import '../../../../../core/utils/typedefs.dart';
 import '../../../../widgets/custom_date_picker.dart';
 import '../../../../widgets/custom_text.dart';
@@ -103,9 +105,15 @@ class _TodoEditPageState extends State<TodoEditPage> {
                 PrimaryButton(
                   labelText: "Save",
                   onPressed: () => todoProvider
-                      .modifyTodo(
+                      .handleAddOrEdit(
                           useCase: widget.routeProps.useCase,
-                          id: widget.routeProps.todo?.id)
+                          id: widget.routeProps.todo?.id,
+                          handlers: RequestHandlers(
+                            onError: ([message]) =>
+                                Helpers.onErrorSnackbar(message, context),
+                            onSuccess: () => Helpers.onSuccessSnackbar(context),
+                            onLoading: () => Helpers.onLoadingSnackbar(context),
+                          ))
                       .then((value) {
                     Navigator.pop(context);
                   }),

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'app.dart';
 import 'core/common/app_providers.dart';
 import 'firebase_options.dart';
-import './injection_container.dart' as di;
+import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

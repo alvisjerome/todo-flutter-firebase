@@ -1,12 +1,13 @@
-import 'package:app/app/modules/authentication/presentation/providers/authentication_provider.dart';
+import 'package:app/core/routes/app_paths.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../widgets/custom_text.dart';
-
-import 'package:flutter/material.dart';
-
 import '../../../../../core/theme/app_theme.dart';
+import '../../../../../core/utils/helpers.dart';
+import '../../../../../core/utils/request_handlers.dart';
+import '../../../../widgets/custom_text.dart';
 import '../../../../widgets/primary_button.dart';
+import '../providers/authentication_provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -28,7 +29,7 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            authProvider.profilePicture.isNotEmpty
+            authProvider.mainUser.photo.isNotEmpty
                 ? Container(
                     height: 100,
                     width: 100,
@@ -36,7 +37,7 @@ class ProfilePage extends StatelessWidget {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                             fit: BoxFit.contain,
-                            image: NetworkImage(authProvider.profilePicture))),
+                            image: NetworkImage(authProvider.mainUser.photo))),
                   )
                 : const Icon(Icons.account_circle,
                     size: 100, color: AppTheme.deepBrown),
@@ -44,7 +45,7 @@ class ProfilePage extends StatelessWidget {
               height: 20,
             ),
             CustomText(
-              value: authProvider.username,
+              value: authProvider.mainUser.name,
               align: TextAlign.center,
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -66,7 +67,7 @@ class ProfilePage extends StatelessWidget {
                 value: "E-mail ID",
               ),
               subtitle: CustomText(
-                value: authProvider.email,
+                value: authProvider.mainUser.email,
               ),
             ),
             ListTile(
@@ -76,14 +77,22 @@ class ProfilePage extends StatelessWidget {
               ),
               title: const CustomText(value: "Account created"),
               subtitle: CustomText(
-                value: authProvider.accountCreation,
+                value: authProvider.mainUser.created,
               ),
             ),
             const Spacer(),
             PrimaryButton(
               labelText: "Log Out",
-              onPressed: () async {
-                await context.read<AuthenticationProvider>().handleSignOut();
+              onPressed: () {
+                context.read<AuthenticationProvider>().handleSignOut(
+                    requestHandlers: RequestHandlers(
+                        onError: ([message]) =>
+                            Helpers.onErrorSnackbar(message, context),
+                        onLoading: () => Helpers.onLoadingSnackbar(context),
+                        onSuccess: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, AppPaths.auth, (route) => false);
+                        }));
               },
             ),
           ],

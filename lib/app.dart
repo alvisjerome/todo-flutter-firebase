@@ -25,9 +25,9 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  // @override
-  // void dispose() {
-  //   cleanup();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    cleanup();
+    super.dispose();
+  }
 }

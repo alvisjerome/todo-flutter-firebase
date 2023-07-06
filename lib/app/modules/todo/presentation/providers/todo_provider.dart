@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/enums/todo_usecase.dart';
 import '../../../../../core/utils/conversion.dart';
+import '../../../../../core/utils/request_handlers.dart';
 import '../../../../../injection_container.dart';
 import '../../datasource/models/todo.dart';
 import '../../datasource/repositories/todo_repository.dart';
@@ -10,7 +12,7 @@ class TodoProvider with ChangeNotifier {
   final _todoRepository = sl<TodoRepository>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  DateTime? _dateTime;
+  DateTime? _dateTime = DateTime.now();
 
   set dateTime(DateTime value) {
     _dateTime = value;
@@ -47,30 +49,44 @@ class TodoProvider with ChangeNotifier {
     _descriptionController.text = todo?.description ?? "";
   }
 
-  Future<void> modifyTodo({TodoUseCase? useCase, String? id}) async {
-    final todo = Todo(
-      id: id,
-      title: title,
-      description: description,
-      dateTime: _dateTime,
-    );
-    if (useCase == TodoUseCase.addTodo) {
-      await addTodo(todo);
-    } else if (useCase == TodoUseCase.editTodo) {
-      await updateTodo(todo);
+  Future<void> handleAddOrEdit(
+      {TodoUseCase? useCase,
+      String? id,
+      required RequestHandlers handlers}) async {
+    try {
+      final todo = Todo(
+        id: id,
+        title: title,
+        description: description,
+        dateTime: _dateTime,
+      );
+      if (todo.title?.isNotEmpty ?? false) {
+        handlers.onLoading!();
+        if (useCase == TodoUseCase.addTodo) {
+          await _todoRepository.addTodo(todo);
+        } else if (useCase == TodoUseCase.editTodo) {
+          await _todoRepository.updateTodo(todo);
+        }
+        handlers.onSuccess!();
+      }
+    } on FirebaseException catch (e) {
+      handlers.onError!(e.message);
+    } catch (e) {
+      handlers.onError!();
     }
   }
 
-  Future<String> addTodo(Todo todo) async {
-    return await _todoRepository.addTodo(todo);
-  }
-
-  Future<void> updateTodo(Todo todo) async {
-    await _todoRepository.updateTodo(todo);
-  }
-
-  Future<void> deleteTodo(String todoId) async {
-    _todoRepository.deleteTodo(todoId);
+  void handleDeleteTodo(
+      {required String todoId, required RequestHandlers handlers}) async {
+    try {
+      handlers.onLoading!();
+      await _todoRepository.deleteTodo(todoId);
+      handlers.onSuccess!();
+    } on FirebaseException catch (e) {
+      handlers.onError!(e.message);
+    } catch (e) {
+      handlers.onError!();
+    }
   }
 
   Stream<List<Todo>> getAllTodos() {

@@ -1,10 +1,10 @@
-import 'package:app/app/modules/todo/presentation/providers/todo_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../datasource/models/todo.dart';
+import '../providers/todo_provider.dart';
 import 'task_menu.dart';
 
 class TaskTile extends StatelessWidget {

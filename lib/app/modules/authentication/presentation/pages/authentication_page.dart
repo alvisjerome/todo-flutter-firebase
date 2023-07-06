@@ -1,13 +1,13 @@
-import 'package:app/app/modules/authentication/presentation/providers/authentication_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../widgets/primary_button.dart';
 import '../../../../../core/common/image_paths.dart';
-
 import '../../../../../core/theme/app_theme.dart';
-import 'package:flutter/material.dart';
-
+import '../../../../../core/utils/helpers.dart';
+import '../../../../../core/utils/request_handlers.dart';
 import '../../../../widgets/custom_text.dart';
+import '../../../../widgets/primary_button.dart';
+import '../providers/authentication_provider.dart';
 
 class AuthenticationPage extends StatelessWidget {
   const AuthenticationPage({super.key});
@@ -50,10 +50,19 @@ class AuthenticationPage extends StatelessWidget {
                 children: [
                   PrimaryButton(
                       labelText: "Continue with Google",
-                      onPressed: () async {
-                        await context
+                      onPressed: () {
+                        context
                             .read<AuthenticationProvider>()
-                            .handleGoogleSignIn();
+                            .handleGoogleSignIn(
+                              requestHandlers: RequestHandlers(
+                                onError: ([message]) =>
+                                    Helpers.onErrorSnackbar(message, context),
+                                onLoading: () =>
+                                    Helpers.onLoadingSnackbar(context),
+                                onSuccess: () => ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar(),
+                              ),
+                            );
                       }),
                   Container(
                     alignment: Alignment.center,

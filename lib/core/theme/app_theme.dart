@@ -11,6 +11,7 @@ final class AppTheme {
   static const tealGreen = Color(0xff2E8A99);
   static const deepRed = Color(0xFFCD1818);
   static const deepBrown = Color(0xFF2B2730);
+  static const amber = Colors.amber;
 
   static Color get randomColor {
     final random = Random();

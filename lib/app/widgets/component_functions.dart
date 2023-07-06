@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 final class ComponentFunctions {
-  static void hanleSnackBar(
+  static void handleSnackBar(
       {required BuildContext context, required SnackBar snakbar}) {
     ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
+      ..clearSnackBars()
       ..showSnackBar(snakbar);
   }
 }

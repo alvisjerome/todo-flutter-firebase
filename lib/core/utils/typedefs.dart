@@ -1,4 +1,4 @@
-import 'package:app/app/modules/todo/datasource/models/todo.dart';
+import '../../app/modules/todo/datasource/models/todo.dart';
 
 import '../enums/todo_usecase.dart';
 

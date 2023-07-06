@@ -1,5 +1,7 @@
-import 'package:app/app/modules/todo/presentation/providers/todo_provider.dart';
-import 'package:app/core/enums/todo_usecase.dart';
+import 'package:app/core/common/image_paths.dart';
+
+import '../providers/todo_provider.dart';
+import '../../../../../core/enums/todo_usecase.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/routes/app_paths.dart';
@@ -53,6 +55,30 @@ class TodoPage extends StatelessWidget {
             }
             if (snapshot.connectionState == ConnectionState.active) {
               final todos = snapshot.data;
+              if (todos?.isEmpty ?? false) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(14.0),
+                          child: Image.asset(
+                            ImagePaths.emptyTodos,
+                          ),
+                        ),
+                        const CustomText(
+                          align: TextAlign.center,
+                          value:
+                              "You have no todos. To add more click on the button at the bottom",
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
+
               return GridView.builder(
                   padding: const EdgeInsets.symmetric(
                       vertical: 15.0, horizontal: 15),
