@@ -34,7 +34,7 @@ class AuthenticationProvider with ChangeNotifier {
     }
   }
 
-  void handleSignOut({required RequestHandlers requestHandlers}) async {
+  Future<void> handleSignOut({required RequestHandlers requestHandlers}) async {
     try {
       requestHandlers.onLoading!();
       await authenticationRepository.signOut();
