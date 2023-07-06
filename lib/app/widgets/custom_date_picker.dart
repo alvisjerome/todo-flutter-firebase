@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomDatePicker extends StatefulWidget {
+  final DateTime? initialDate;
   final Function(DateTime) onDateSelected;
-  const CustomDatePicker({super.key, required this.onDateSelected});
+  const CustomDatePicker(
+      {super.key, required this.onDateSelected, this.initialDate});
 
   @override
   State<CustomDatePicker> createState() => _CustomDatePickerState();
@@ -15,7 +17,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   Future<void> handleSelectDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: currentDate,
+      initialDate: widget.initialDate ?? currentDate,
       firstDate: currentDate,
       lastDate: lastDate,
     );

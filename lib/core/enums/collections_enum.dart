@@ -1,0 +1,1 @@
+enum CollectionEnum { users, todos }

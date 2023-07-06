@@ -1,7 +1,9 @@
 import 'package:intl/intl.dart';
 
 final class Conversion {
-  static String formatDate(DateTime dateTime) {
+  static String formatDate(DateTime? dateTime) {
+    if (dateTime == null) return "";
+
     final format = DateFormat("d MMMM, yyyy", "en_US");
     String formattedDate = format.format(dateTime);
 

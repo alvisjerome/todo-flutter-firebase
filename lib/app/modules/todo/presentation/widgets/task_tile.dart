@@ -1,52 +1,59 @@
+import 'package:app/app/modules/todo/presentation/providers/todo_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../widgets/custom_text.dart';
+import '../../datasource/models/todo.dart';
 import 'task_menu.dart';
 
 class TaskTile extends StatelessWidget {
-  const TaskTile({super.key});
+  final Todo? todo;
+
+  const TaskTile({super.key, required this.todo});
 
   @override
   Widget build(BuildContext context) {
+    final todoProvider = context.read<TodoProvider>();
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.randomColor,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             children: [
               Expanded(
                   child: Padding(
-                padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                 child: CustomText(
-                  value: "Shopping Grocery",
+                  value: todo?.title ?? "",
                   fontWeight: FontWeight.bold,
                   maxLine: 2,
                   textOverflow: TextOverflow.ellipsis,
                 ),
               )),
-              TaskMenu()
+              TaskMenu(
+                todo: todo,
+              )
             ],
           ),
           Flexible(
             child: Padding(
-              padding: EdgeInsets.only(left: 10.0, top: 5, right: 10),
+              padding: const EdgeInsets.only(left: 10.0, top: 5, right: 10),
               child: CustomText(
                 maxLine: 4,
-                value:
-                    "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                value: todo?.description ?? "",
                 textOverflow: TextOverflow.ellipsis,
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 10.0, top: 5, bottom: 3.0),
+            padding: const EdgeInsets.only(left: 10.0, top: 5, bottom: 3.0),
             child: CustomText(
-              value: "4th April 2023",
+              value: todoProvider.formatDateTime(todo?.dateTime),
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),

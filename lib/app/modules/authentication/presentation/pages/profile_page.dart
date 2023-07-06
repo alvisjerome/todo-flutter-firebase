@@ -13,6 +13,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthenticationProvider>();
     return Scaffold(
       appBar: AppBar(
         title: const CustomText(
@@ -27,15 +28,23 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Icon(Icons.account_circle,
-                size: 100,
-                // color: AppTheme.lightPink,
-                color: AppTheme.deepBrown),
+            authProvider.profilePicture.isNotEmpty
+                ? Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            fit: BoxFit.contain,
+                            image: NetworkImage(authProvider.profilePicture))),
+                  )
+                : const Icon(Icons.account_circle,
+                    size: 100, color: AppTheme.deepBrown),
             const SizedBox(
               height: 20,
             ),
-            const CustomText(
-              value: "Alvis Jerome",
+            CustomText(
+              value: authProvider.username,
               align: TextAlign.center,
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -48,23 +57,27 @@ class ProfilePage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const ListTile(
-              leading: Icon(
+            ListTile(
+              leading: const Icon(
                 Icons.mail,
                 color: AppTheme.tealGreen,
               ),
-              title: CustomText(
+              title: const CustomText(
                 value: "E-mail ID",
               ),
-              subtitle: CustomText(value: "alvisjerome@gmail.com"),
+              subtitle: CustomText(
+                value: authProvider.email,
+              ),
             ),
-            const ListTile(
-              leading: Icon(
+            ListTile(
+              leading: const Icon(
                 Icons.date_range,
                 color: AppTheme.tealGreen,
               ),
-              title: CustomText(value: "Account created"),
-              subtitle: CustomText(value: "5th July, 2023"),
+              title: const CustomText(value: "Account created"),
+              subtitle: CustomText(
+                value: authProvider.accountCreation,
+              ),
             ),
             const Spacer(),
             PrimaryButton(

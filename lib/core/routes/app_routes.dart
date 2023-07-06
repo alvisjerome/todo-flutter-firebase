@@ -6,7 +6,7 @@ import '../../app/modules/authentication/presentation/pages/profile_page.dart';
 import '../../app/modules/todo/presentation/pages/todo_edit_page.dart';
 import '../../app/modules/todo/presentation/pages/todo_page.dart';
 import '../../app/widgets/error_page.dart';
-import '../enums/todo_usecase.dart';
+import '../utils/typedefs.dart';
 import 'app_paths.dart';
 
 final class AppRoutes {
@@ -20,8 +20,8 @@ final class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ProfilePage());
       case AppPaths.editTodo:
         return MaterialPageRoute(
-            builder: (_) =>
-                TodoEditPage(useCase: settings?.arguments as TodoUseCase?));
+            builder: (_) => TodoEditPage(
+                routeProps: settings?.arguments as TodoRouteProps));
       default:
         return MaterialPageRoute(builder: (_) => const ErrorPage());
     }
