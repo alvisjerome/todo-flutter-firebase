@@ -5,10 +5,11 @@ import '../../core/theme/app_theme.dart';
 import 'custom_text.dart';
 
 class CustomSnackbar extends SnackBar {
-  final SnackbarType type;
+  final SnackbarType? type;
   final String? message;
-  CustomSnackbar({super.key, required this.type, this.message})
+  CustomSnackbar({super.key, this.type = SnackbarType.none, this.message})
       : super(
+          duration: const Duration(milliseconds: 500),
           backgroundColor: type == SnackbarType.error
               ? AppTheme.deepRed
               : AppTheme.tealGreen,

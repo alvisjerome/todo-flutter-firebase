@@ -16,8 +16,8 @@ final rootNavigatorKeyProvider =
     Provider<GlobalKey<NavigatorState>>((ref) => GlobalKey<NavigatorState>());
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authRepository = ref.read(authRepositoryProvider);
-  final rootNavigatorKey = ref.read(rootNavigatorKeyProvider);
+  final authRepository = ref.watch(authRepositoryProvider);
+  final rootNavigatorKey = ref.watch(rootNavigatorKeyProvider);
 
   return GoRouter(
     initialLocation: RoutePaths.auth,
@@ -26,9 +26,16 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final authenticated = authRepository.currentUser != null;
       if (authenticated) {
-        return RoutePaths.todo;
+        if (state.location.startsWith(RoutePaths.auth)) {
+          return RoutePaths.todo;
+        }
+      } else {
+        if (state.location.startsWith(RoutePaths.todo)) {
+          return RoutePaths.auth;
+        }
       }
-      return RoutePaths.auth;
+
+      return null;
     },
     routes: [
       GoRoute(

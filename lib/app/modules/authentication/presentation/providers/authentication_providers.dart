@@ -49,5 +49,8 @@ class AuthenticationNotifier extends AsyncNotifier<UserCredential?> {
 
 final userProvider = StateProvider((ref) {
   final authNotifier = ref.watch(authNotifierProvider);
-  return MainUser.fromUser(authNotifier.value?.user);
+  final firebaseAuth = ref.watch(firebaseAuthProvider);
+
+  return MainUser.fromUser(
+      authNotifier.value?.user ?? firebaseAuth.currentUser);
 });

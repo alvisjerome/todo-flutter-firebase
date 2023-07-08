@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_theme.dart';
+import '../../../../../core/utils/conversion.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../datasource/models/todo.dart';
 import 'task_menu.dart';
@@ -23,18 +24,17 @@ class TaskTile extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                child: CustomText(
-                  value: todo?.title ?? "",
-                  fontWeight: FontWeight.bold,
-                  maxLine: 2,
-                  textOverflow: TextOverflow.ellipsis,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: CustomText(
+                    value: todo?.title ?? "",
+                    fontWeight: FontWeight.bold,
+                    maxLine: 2,
+                    textOverflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              )),
-              TaskMenu(
-                todo: todo,
-              )
+              ),
+              TaskMenu(todo: todo)
             ],
           ),
           Expanded(
@@ -47,10 +47,10 @@ class TaskTile extends StatelessWidget {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 10.0, top: 5, bottom: 3.0),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0, top: 5, bottom: 3.0),
             child: CustomText(
-              value: "",
+              value: Conversion.formatDate(todo?.dateTime),
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),

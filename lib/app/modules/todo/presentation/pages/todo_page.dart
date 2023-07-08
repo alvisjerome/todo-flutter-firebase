@@ -22,21 +22,35 @@ class TodoPage extends ConsumerWidget {
       (_, next) {
         final messenger = ScaffoldMessenger.of(context)..hideCurrentSnackBar();
 
-        next.whenOrNull(
+        next.when(
           loading: () {
             messenger.showSnackBar(CustomSnackbar(type: SnackbarType.loading));
           },
-          error: (error, stackTrace) {
+          error: (error, stack) {
             messenger.showSnackBar(CustomSnackbar(
               type: SnackbarType.error,
               message: error.toString(),
             ));
           },
           data: (data) {
-            messenger.showSnackBar(CustomSnackbar(
-              type: SnackbarType.success,
-              message: "Task has been deleted successfully!",
-            ));
+            final performedAction = switch (data) {
+              TodoUseCase.none => "",
+              TodoUseCase.add => "added",
+              TodoUseCase.delete => "deleted",
+              TodoUseCase.edit => "edited",
+            };
+
+            messenger
+                .showSnackBar(CustomSnackbar(
+                  type: SnackbarType.success,
+                  message: "Task has been $performedAction successfully!",
+                ))
+                .closed
+                .then((_) {
+              if (data != TodoUseCase.delete) {
+                context.pop();
+              }
+            });
           },
         );
       },

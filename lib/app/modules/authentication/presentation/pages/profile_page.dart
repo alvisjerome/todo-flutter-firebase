@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/theme/app_theme.dart';
+import '../../../../../core/utils/conversion.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../../../widgets/primary_button.dart';
 import '../providers/authentication_providers.dart';
@@ -90,7 +91,7 @@ class ProfilePage extends ConsumerWidget {
               ),
               title: const CustomText(value: "Account created"),
               subtitle: CustomText(
-                value: user.created ?? "",
+                value: Conversion.formatDate(user.created),
               ),
             ),
             const Spacer(),

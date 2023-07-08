@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/enums/todo_usecase.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/utils/conversion.dart';
 import '../../../../../core/utils/typedefs.dart';
 import '../../../../widgets/custom_date_picker.dart';
+import '../../../../widgets/custom_snackbar.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../../../widgets/primary_button.dart';
 import '../../datasource/models/todo.dart';
@@ -36,17 +38,6 @@ class _TodoEditPageState extends ConsumerState<TodoEditPage> {
     titleController.text = previousTodo?.title ?? "";
     descriptionController.text = previousTodo?.description ?? "";
     dateTime.value = previousTodo?.dateTime;
-  }
-
-  void saveButtonHandler() {
-    final updatedTodo = previousTodo?.copyWith(
-      title: titleController.text.trim(),
-      description: descriptionController.text.trim(),
-      dateTime: dateTime.value,
-    );
-
-    ref.read(todoNotifierProvider.notifier).performTodoAcions(
-        todo: updatedTodo!, useCase: widget.routeProps.useCase);
   }
 
   @override
@@ -104,6 +95,35 @@ class _TodoEditPageState extends ConsumerState<TodoEditPage> {
             ),
           ),
         ));
+  }
+
+  void saveButtonHandler() {
+    final title = titleController.text.trim();
+    final description = descriptionController.text.trim();
+
+    if (title.isNotEmpty) {
+      final todo = Todo(
+        id: previousTodo?.id,
+        dateTime: dateTime.value,
+        title: title,
+        description: description,
+      );
+      if (todo == previousTodo) {
+        context.pop();
+        return;
+      }
+      ref
+          .read(todoNotifierProvider.notifier)
+          .performTodoAcions(todo: todo, useCase: widget.routeProps.useCase);
+    } else {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(CustomSnackbar(
+          message: "Please provide a Title!",
+        ));
+    }
+
+    return;
   }
 
   @override

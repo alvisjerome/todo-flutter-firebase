@@ -6,7 +6,7 @@ import '../models/todo.dart';
 
 abstract interface class TodoRepository {
   Stream<List<Todo>> getTodos();
-  Future<String> addTodo(Todo todo);
+  Future<void> addTodo(Todo todo);
   Future<void> updateTodo(Todo todo);
   Future<void> deleteTodo(String todoId);
 }
@@ -34,9 +34,9 @@ class TodoRepositoryImpl implements TodoRepository {
   }
 
   @override
-  Future<String> addTodo(Todo todo) async {
-    final docRef = await _todosCollection.add(todo.toMap());
-    return docRef.id;
+  Future<void> addTodo(Todo todo) async {
+    await _todosCollection.add(todo.toMap());
+    return;
   }
 
   @override

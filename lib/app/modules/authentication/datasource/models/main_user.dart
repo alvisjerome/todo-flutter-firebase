@@ -1,13 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../../../core/utils/conversion.dart';
-
 class MainUser extends Equatable {
   final String? name;
   final String? email;
   final String? photo;
-  final String? created;
+  final DateTime? created;
 
   const MainUser(
       {required this.name,
@@ -20,7 +18,7 @@ class MainUser extends Equatable {
         name: user?.displayName,
         email: user?.email,
         photo: user?.photoURL,
-        created: Conversion.formatDate(user?.metadata.creationTime));
+        created: user?.metadata.creationTime);
   }
 
   factory MainUser.fromMap(Map<String, dynamic> map) {
@@ -41,7 +39,7 @@ class MainUser extends Equatable {
   }
 
   MainUser copyWith(
-      {String? name, String? email, String? photo, String? created}) {
+      {String? name, String? email, String? photo, DateTime? created}) {
     return MainUser(
         name: name ?? this.name,
         email: email ?? this.email,

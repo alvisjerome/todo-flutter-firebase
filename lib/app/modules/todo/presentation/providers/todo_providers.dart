@@ -18,20 +18,30 @@ final todoRepositoryProvider = Provider<TodoRepository>((ref) {
 final getTodosProvider =
     StreamProvider((ref) => ref.watch(todoRepositoryProvider).getTodos());
 
-class TodoNotifier extends AsyncNotifier<void> {
+class TodoNotifier extends AsyncNotifier<TodoUseCase> {
   @override
-  FutureOr<void> build() {}
+  FutureOr<TodoUseCase> build() {
+    return TodoUseCase.none;
+  }
 
   Future<void> performTodoAcions(
       {required Todo todo, required TodoUseCase useCase}) async {
     final repository = ref.read(todoRepositoryProvider);
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => switch (useCase) {
-          TodoUseCase.add => repository.addTodo(todo),
-          TodoUseCase.edit => repository.updateTodo(todo),
-          TodoUseCase.delete => repository.deleteTodo(todo.id ?? "")
-        });
+
+    state = await AsyncValue.guard(() async {
+      if (useCase == TodoUseCase.add) {
+        repository.addTodo(todo);
+      } else if (useCase == TodoUseCase.edit) {
+        repository.updateTodo(todo);
+      } else if (useCase == TodoUseCase.delete) {
+        repository.deleteTodo(todo.id ?? "");
+      }
+
+      return useCase;
+    });
   }
 }
 
-final todoNotifierProvider = AsyncNotifierProvider(TodoNotifier.new);
+final todoNotifierProvider =
+    AsyncNotifierProvider<TodoNotifier, TodoUseCase>(TodoNotifier.new);
