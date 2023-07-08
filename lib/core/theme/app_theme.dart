@@ -1,7 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'dart:math';
 
 final class AppTheme {
   static const primaryColor = Colors.deepPurple;

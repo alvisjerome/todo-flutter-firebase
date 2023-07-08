@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common/image_paths.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/utils/helpers.dart';
-import '../../../../../core/utils/request_handlers.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../../../widgets/primary_button.dart';
-import '../providers/authentication_provider.dart';
+import '../providers/authentication_providers.dart';
 
-class AuthenticationPage extends StatelessWidget {
+class AuthenticationPage extends ConsumerWidget {
   const AuthenticationPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(
+      authNotifierProvider,
+      (_, next) {
+        next.maybeWhen(
+          orElse: () => null,
+          error: (error, stackTrace) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                  backgroundColor: AppTheme.deepRed,
+                  content: CustomText(
+                    value: error.toString(),
+                    color: AppTheme.white,
+                  )));
+          },
+        );
+      },
+    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.white,
@@ -48,21 +64,22 @@ class AuthenticationPage extends StatelessWidget {
               ),
               Column(
                 children: [
-                  PrimaryButton(
+                  Consumer(builder: (context, ref, _) {
+                    final provider = ref.watch(authNotifierProvider);
+                    return PrimaryButton(
                       labelText: "Continue with Google",
-                      onPressed: () {
-                        context
-                            .read<AuthenticationProvider>()
-                            .handleGoogleSignIn(
-                              requestHandlers: RequestHandlers(
-                                  onError: ([message]) =>
-                                      Helpers.onErrorSnackbar(message, context),
-                                  onLoading: () =>
-                                      Helpers.onLoadingSnackbar(context),
-                                  onSuccess: () => Helpers.onSuccessSnackbar(
-                                      context, "Logged In Successfully!")),
-                            );
-                      }),
+                      onPressed: ref
+                          .read(authNotifierProvider.notifier)
+                          .signInWithGoogle,
+                      child: provider.whenOrNull(
+                        skipError: true,
+                        loading: () => const CircularProgressIndicator(
+                          backgroundColor: AppTheme.white,
+                          color: AppTheme.amber,
+                        ),
+                      ),
+                    );
+                  }),
                   Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(top: 10.0),

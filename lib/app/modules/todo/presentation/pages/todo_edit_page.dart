@@ -1,28 +1,26 @@
-import 'package:app/app/modules/todo/datasource/models/todo.dart';
-import 'package:app/app/modules/todo/presentation/widgets/task_textfield.dart';
-import 'package:app/core/utils/conversion.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/enums/todo_usecase.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/utils/helpers.dart';
-import '../../../../../core/utils/request_handlers.dart';
+import '../../../../../core/utils/conversion.dart';
 import '../../../../../core/utils/typedefs.dart';
 import '../../../../widgets/custom_date_picker.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../../../widgets/primary_button.dart';
-import '../providers/todo_provider.dart';
+import '../../datasource/models/todo.dart';
+import '../providers/todo_providers.dart';
+import '../widgets/task_textfield.dart';
 
-class TodoEditPage extends StatefulWidget {
+class TodoEditPage extends ConsumerStatefulWidget {
   final TodoRouteProps routeProps;
   const TodoEditPage({super.key, required this.routeProps});
 
   @override
-  State<TodoEditPage> createState() => _TodoEditPageState();
+  ConsumerState<TodoEditPage> createState() => _TodoEditPageState();
 }
 
-class _TodoEditPageState extends State<TodoEditPage> {
+class _TodoEditPageState extends ConsumerState<TodoEditPage> {
   ValueNotifier<DateTime?> dateTime = ValueNotifier<DateTime?>(null);
 
   final titleController = TextEditingController();
@@ -41,25 +39,14 @@ class _TodoEditPageState extends State<TodoEditPage> {
   }
 
   void saveButtonHandler() {
-    final Todo todo = Todo(
-      id: widget.routeProps.todo?.id,
-      dateTime: dateTime.value,
+    final updatedTodo = previousTodo?.copyWith(
       title: titleController.text.trim(),
       description: descriptionController.text.trim(),
+      dateTime: dateTime.value,
     );
-    context
-        .read<TodoProvider>()
-        .handleAddOrEdit(
-            useCase: widget.routeProps.useCase,
-            todo: todo,
-            handlers: RequestHandlers(
-              onError: ([message]) => Helpers.onErrorSnackbar(message, context),
-              onSuccess: () => Helpers.onSuccessSnackbar(context),
-              onLoading: () => Helpers.onLoadingSnackbar(context),
-            ))
-        .then((value) {
-      Navigator.pop(context);
-    });
+
+    ref.read(todoNotifierProvider.notifier).performTodoAcions(
+        todo: updatedTodo!, useCase: widget.routeProps.useCase);
   }
 
   @override
@@ -67,7 +54,7 @@ class _TodoEditPageState extends State<TodoEditPage> {
     return Scaffold(
         appBar: AppBar(
           title: CustomText(
-            value: widget.routeProps.useCase == TodoUseCase.addTodo
+            value: widget.routeProps.useCase == TodoUseCase.add
                 ? "Add Todo"
                 : "Edit Todo",
             fontSize: 17,

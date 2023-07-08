@@ -4,6 +4,7 @@ import '../../core/theme/app_theme.dart';
 import 'custom_text.dart';
 
 class PrimaryButton extends StatelessWidget {
+  final Widget? child;
   final Color? color, labelColor;
   final String labelText;
   final VoidCallback onPressed;
@@ -12,6 +13,7 @@ class PrimaryButton extends StatelessWidget {
 
   const PrimaryButton({
     super.key,
+    this.child,
     this.color,
     this.labelColor,
     this.height,
@@ -33,10 +35,11 @@ class PrimaryButton extends StatelessWidget {
               ? null
               : Size(width ?? double.maxFinite, height ?? 48)),
       onPressed: onPressed,
-      child: CustomText(
-        value: labelText,
-        color: labelColor ?? AppTheme.white,
-      ),
+      child: child ??
+          CustomText(
+            value: labelText,
+            color: labelColor ?? AppTheme.white,
+          ),
     );
   }
 }

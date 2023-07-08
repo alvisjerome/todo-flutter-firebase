@@ -1,5 +1,6 @@
-import 'package:app/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../../core/theme/app_theme.dart';
 
 class TaskTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -8,12 +9,15 @@ class TaskTextField extends StatelessWidget {
 
   const TaskTextField(
       {super.key,
-      required this.controller,
       this.maxLines,
+      required this.controller,
       required this.hintText});
 
   @override
   Widget build(BuildContext context) {
+    final outlineBorder = OutlineInputBorder(
+        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(12));
+
     return TextField(
       controller: controller,
       textInputAction: TextInputAction.done,
@@ -22,12 +26,8 @@ class TaskTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: Theme.of(context).textTheme.body.copyWith(),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(12)),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(12)),
+        focusedBorder: outlineBorder,
+        enabledBorder: outlineBorder,
         filled: true,
         fillColor: AppTheme.lightPink,
         border: InputBorder.none,

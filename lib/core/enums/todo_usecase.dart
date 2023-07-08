@@ -1,1 +1,1 @@
-enum TodoUseCase { addTodo, editTodo }
+enum TodoUseCase { add, edit, delete }

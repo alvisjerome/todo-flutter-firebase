@@ -1,23 +1,47 @@
-import 'package:app/core/common/image_paths.dart';
-
-import '../providers/todo_provider.dart';
-import '../../../../../core/enums/todo_usecase.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../../core/routes/app_paths.dart';
-import '../../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../core/enums/snackbar_types.dart';
+import '../../../../../core/enums/todo_usecase.dart';
+import '../../../../../core/routes/route_paths.dart';
+import '../../../../../core/theme/app_theme.dart';
+import '../../../../widgets/custom_snackbar.dart';
 import '../../../../widgets/custom_text.dart';
-import '../../datasource/models/todo.dart';
+import '../providers/todo_providers.dart';
+import '../widgets/task_empty.dart';
 import '../widgets/task_tile.dart';
 
-class TodoPage extends StatelessWidget {
+class TodoPage extends ConsumerWidget {
   const TodoPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final todosProvider = context.read<TodoProvider>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(
+      todoNotifierProvider,
+      (_, next) {
+        final messenger = ScaffoldMessenger.of(context)..hideCurrentSnackBar();
+
+        next.whenOrNull(
+          loading: () {
+            messenger.showSnackBar(CustomSnackbar(type: SnackbarType.loading));
+          },
+          error: (error, stackTrace) {
+            messenger.showSnackBar(CustomSnackbar(
+              type: SnackbarType.error,
+              message: error.toString(),
+            ));
+          },
+          data: (data) {
+            messenger.showSnackBar(CustomSnackbar(
+              type: SnackbarType.success,
+              message: "Task has been deleted successfully!",
+            ));
+          },
+        );
+      },
+    );
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -31,75 +55,48 @@ class TodoPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppPaths.profile);
-                },
+                onPressed: () => context.goNamed(RouteNames.profile.name),
                 icon: const Icon(
                   Icons.account_circle,
                 ))
           ],
         ),
-        body: StreamBuilder<List<Todo>>(
-            stream: todosProvider.getAllTodos(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                    alignment: Alignment.center,
-                    child: CustomText(value: "${snapshot.error}"));
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.5,
-                  ),
-                );
-              }
-              if (snapshot.connectionState == ConnectionState.active) {
-                final todos = snapshot.data;
-                if (todos?.isEmpty ?? false) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(14.0),
-                            child: Image.asset(
-                              ImagePaths.emptyTodos,
-                            ),
-                          ),
-                          const CustomText(
-                            align: TextAlign.center,
-                            value:
-                                "You have no todos. To add more click on the button at the bottom",
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                }
+        body: Consumer(builder: (context, ref, _) {
+          final todos = ref.watch(getTodosProvider);
 
-                return GridView.builder(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15.0, horizontal: 15),
-                    itemCount: todos?.length ?? 0,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10),
-                    itemBuilder: (context, index) {
-                      return TaskTile(todo: todos?[index]);
-                    });
-              }
-              return const SizedBox();
-            }),
+          return todos.maybeWhen(
+            orElse: () => const SizedBox(),
+            loading: () {
+              return const Center(child: CircularProgressIndicator());
+            },
+            data: (todos) {
+              return (todos.isEmpty)
+                  ? const TaskEmptyWidget()
+                  : GridView.builder(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 15),
+                      itemCount: todos.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10),
+                      itemBuilder: (context, index) {
+                        return TaskTile(todo: todos[index]);
+                      });
+            },
+            error: (error, stacktrace) {
+              return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                  alignment: Alignment.center,
+                  child: CustomText(value: "$error"));
+            },
+          );
+        }),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            const record = (useCase: TodoUseCase.addTodo, todo: null);
-            Navigator.pushNamed(context, AppPaths.editTodo, arguments: record);
+            const record = (useCase: TodoUseCase.add, todo: null);
+            context.goNamed(RouteNames.editTodo.name, extra: record);
           },
           child: const Icon(Icons.add),
         ),

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../datasource/models/todo.dart';
-import '../providers/todo_provider.dart';
 import 'task_menu.dart';
 
 class TaskTile extends StatelessWidget {
@@ -14,7 +12,6 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todoProvider = context.read<TodoProvider>();
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.randomColor,
@@ -50,10 +47,10 @@ class TaskTile extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 5, bottom: 3.0),
+          const Padding(
+            padding: EdgeInsets.only(left: 10.0, top: 5, bottom: 3.0),
             child: CustomText(
-              value: todoProvider.formatDateTime(todo?.dateTime),
+              value: "",
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),

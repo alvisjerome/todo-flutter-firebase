@@ -1,5 +1,6 @@
-import 'custom_text.dart';
 import 'package:flutter/material.dart';
+
+import 'custom_text.dart';
 
 class ErrorPage extends StatelessWidget {
   final String? message;

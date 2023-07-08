@@ -1,35 +1,19 @@
-import 'package:app/core/common/app_keys.dart';
+import 'package:app/core/routes/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'app/modules/authentication/datasource/repositories/authentication_repository.dart';
-import 'app/widgets/authentication_wrapper.dart';
-import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
-import 'injection_container.dart';
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final authStateChanges = sl<AuthenticationRepository>().authStateChanges;
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: AppKeys.navigatorKey,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+    return MaterialApp.router(
       title: 'STAGE Todo',
       theme: AppTheme.appTheme(context),
-      onGenerateRoute: AppRoutes.onGenerateRoute,
-      home: AuthenticationWrapper(authStateChanges: authStateChanges),
+      routerConfig: router,
     );
-  }
-
-  @override
-  void dispose() {
-    cleanup();
-    super.dispose();
   }
 }

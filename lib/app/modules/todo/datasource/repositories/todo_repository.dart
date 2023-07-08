@@ -28,36 +28,21 @@ class TodoRepositoryImpl implements TodoRepository {
     return _todosCollection.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>?;
-        return Todo(
-          id: doc.id,
-          title: data?['title'],
-          description: data?['description'],
-          dateTime: data?['dateTime'] != null
-              ? (data?['dateTime'] as Timestamp).toDate()
-              : null,
-        );
+        return Todo.fromMap(id: doc.id, map: data);
       }).toList();
     });
   }
 
   @override
   Future<String> addTodo(Todo todo) async {
-    final docRef = await _todosCollection.add({
-      'title': todo.title,
-      'description': todo.description,
-      'dateTime': todo.dateTime,
-    });
+    final docRef = await _todosCollection.add(todo.toMap());
     return docRef.id;
   }
 
   @override
   Future<void> updateTodo(Todo todo) async {
     final docRef = _todosCollection.doc(todo.id);
-    return await docRef.update({
-      'title': todo.title,
-      'description': todo.description,
-      'dateTime': todo.dateTime,
-    });
+    return await docRef.update(todo.toMap());
   }
 
   @override
