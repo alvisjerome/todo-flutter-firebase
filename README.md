@@ -35,4 +35,4 @@ These are some main packages used in the app:
 Most of the packages are the same in v2.0, except for the following two added in place of `provider` and `get_it`:
 
 - [flutter_riverpod](https://pub.dev/packages/flutter_riverpod)
-- [go_router](https://pub.dev/packages/go_routert)
+- [go_router](https://pub.dev/packages/go_router)
