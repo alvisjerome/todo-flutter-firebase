@@ -24,7 +24,7 @@ class TodoNotifier extends AsyncNotifier<TodoUseCase> {
     return TodoUseCase.none;
   }
 
-  Future<void> performTodoAcions(
+  Future<void> performTodoActions(
       {required Todo todo, required TodoUseCase useCase}) async {
     final repository = ref.read(todoRepositoryProvider);
     state = const AsyncValue.loading();

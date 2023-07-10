@@ -114,7 +114,7 @@ class _TodoEditPageState extends ConsumerState<TodoEditPage> {
       }
       ref
           .read(todoNotifierProvider.notifier)
-          .performTodoAcions(todo: todo, useCase: widget.routeProps.useCase);
+          .performTodoActions(todo: todo, useCase: widget.routeProps.useCase);
     } else {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()

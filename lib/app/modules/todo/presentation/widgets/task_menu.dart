@@ -20,7 +20,7 @@ class TaskMenu extends ConsumerWidget {
       context.goNamed(RouteNames.editTodo.name, extra: routeProps);
     } else if (value == TodoUseCase.delete.name) {
       if (todo != null) {
-        todosProvider.performTodoAcions(
+        todosProvider.performTodoActions(
             todo: todo!, useCase: TodoUseCase.delete);
       }
     }
